@@ -1,5 +1,6 @@
 const posts = require('../public/posts');
 
+
 // funzione
 const getAllPosts = (req, res) => {
     console.log('Richiesta GET su /posts');

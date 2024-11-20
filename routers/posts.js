@@ -1,5 +1,7 @@
 // Importo express
 const express = require('express');
+// importo le funzioni dal controller 
+const {getAllPosts, getPostSlug} = require('../controllers/postsController');
 
 // creo un'istanza una configurazione 
 const router = express.Router();  
@@ -8,27 +10,10 @@ const router = express.Router();
 const posts = require('../public/posts');
 
 // Index che mi restituisce la lista in formato jsson
-router.get('/', (req, res) => {
-    console.log('Richiesta GET su /posts');
-    res.json({
-        count: posts.length,
-        posts: posts,
-    });
-});
+router.get('/', getAllPosts);
 
 // Show che mi restituisce un singolo post 
-router.get('/:slug', (req, res) => {
-    const slug = req.params.slug;  //ottengo lo slug
-    const post = posts.find(p => p.slug === slug); // trovo il post che corrisponde 
-
-    if(post) {
-        console.log(`Richiesta GET su /posts/ ${slug} `); //monitoro la richiesta
-        res.json(post);
-    } else {
-        console.log(`Post con ${slug} non trovato`);
-        res.status(404).json({error: 'Post non trovato'});
-    }
-});
+router.get('/:slug', getPostSlug);
 
 
 
