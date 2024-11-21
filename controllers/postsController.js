@@ -1,7 +1,8 @@
-const posts = require('../public/posts');
+const posts = require('../data/postsData');
+const { post } = require('../routers/posts');
 
 
-// funzione
+// funzione (index)
 const getAllPosts = (req, res) => {
     console.log('Richiesta GET su /posts');
     res.json({
@@ -10,7 +11,7 @@ const getAllPosts = (req, res) => {
     });
 };
 
-// funzione
+// funzione (show)
 const getPostSlugOrTag = (req, res) => {
     const param = req.params.slug;  //ottengo lo slug
     const post = posts.find(p => p.slug === param); // trovo il post che corrisponde 
@@ -31,4 +32,20 @@ const getPostSlugOrTag = (req, res) => {
         res.status(404).json({error: `Nessun post trovato slug o tag ${param}`});
 };
 
-module.exports = {getAllPosts, getPostSlugOrTag};
+// funzione (destroy)
+
+const deletePostsBySlug = (req, res) => {
+    const slug = req.params.slug;
+    const index = posts.findIndex(p => p.slug === slug); //trovo l'indice 
+
+    if(index !== -1) {
+        const deletedPosts = posts.splice(index, 1); // rimuovo il post degli array
+        console.log(`Posts ${slug} elimniato . Lista aggiornata: ${posts}` );  
+        res.status(204).send();
+    } else {
+        console.log(`Posts con slug ${slug} non trovato`);
+        res.status(404).json({error: `Posts con slug ${slug} non trovato.`});
+    }
+}
+
+module.exports = {getAllPosts, getPostSlugOrTag,  deletePostsBySlug };
