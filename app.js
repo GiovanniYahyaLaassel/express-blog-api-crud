@@ -1,13 +1,18 @@
 // Configurazione base di express
-
 const express = require('express');
 const app = express();
 
-//uso i middleware 
-app.use(express.json());
 
 // importo il router 
 const postsRouter = require('./routers/posts');
+
+// configuro body-parser
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
+
+//uso i middleware 
+app.use(express.json());
 
 // configuro il prefisso per tutte le rotte 
 app.use('/posts', postsRouter);

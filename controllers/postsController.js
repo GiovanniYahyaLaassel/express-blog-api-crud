@@ -50,6 +50,7 @@ const destroy = (req, res) => {
 
 // funzione (store per creare un nuovo post)
 const store = (req,res) => {
+    console.log('Dati ricevuti nel body:',req.body);  //dati in arrivo
     // ottengo i dati
     const {title, slug, content, image, tags} = req.body;
 
