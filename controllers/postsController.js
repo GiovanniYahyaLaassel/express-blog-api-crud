@@ -11,17 +11,24 @@ const getAllPosts = (req, res) => {
 };
 
 // funzione
-const getPostSlug = (req, res) => {
-    const slug = req.params.slug;  //ottengo lo slug
-    const post = posts.find(p => p.slug === slug); // trovo il post che corrisponde 
+const getPostSlugOrTag = (req, res) => {
+    const param = req.params.slug;  //ottengo lo slug
+    const post = posts.find(p => p.slug === param); // trovo il post che corrisponde 
 
     if(post) {
-        console.log(`Richiesta GET su /posts/ ${slug} `); //monitoro la richiesta
+        console.log(`Richiesta GET su /posts/ ${param} (slug) `); //monitoro la richiesta
         res.json(post);
-    } else {
-        console.log(`Post con ${slug} non trovato`);
-        res.status(404).json({error: 'Post non trovato'});
+    } 
+
+    const filteredPosts = posts.filter(p => p.tags.includes(param)); 
+    
+    if (filteredPosts.length > 0 ) {
+        console.log(`Richiesta GET su /posts/ ${param} (tag) `);
+        return res.json(filteredPosts);
     }
+
+        console.log(`Nessun post trovato slug o tag ${param}`);
+        res.status(404).json({error: `Nessun post trovato slug o tag ${param}`});
 };
 
-module.exports = {getAllPosts, getPostSlug};
+module.exports = {getAllPosts, getPostSlugOrTag};

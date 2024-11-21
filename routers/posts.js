@@ -1,7 +1,7 @@
 // Importo express
 const express = require('express');
 // importo le funzioni dal controller 
-const {getAllPosts, getPostSlug} = require('../controllers/postsController');
+const {getAllPosts, getPostSlugOrTag} = require('../controllers/postsController');
 
 // creo un'istanza una configurazione 
 const router = express.Router();  
@@ -13,7 +13,7 @@ const posts = require('../public/posts');
 router.get('/', getAllPosts);
 
 // Show che mi restituisce un singolo post 
-router.get('/:slug', getPostSlug);
+router.get('/:slug', getPostSlugOrTag);
 
 
 
@@ -26,3 +26,4 @@ router.get('/:slug', getPostSlug);
 // esporto il router per usarlo i altri file
 
 module.exports = router;
+
