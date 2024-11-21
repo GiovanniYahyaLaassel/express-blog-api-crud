@@ -1,7 +1,7 @@
 // Importo express
 const express = require('express');
 // importo le funzioni dal controller 
-const {getAllPosts, getPostSlugOrTag, deletePostsBySlug } = require('../controllers/postsController');
+const {index, show, destroy, store } = require('../controllers/postsController');
 
 // creo un'istanza una configurazione 
 const router = express.Router();  
@@ -10,14 +10,17 @@ const router = express.Router();
 const posts = require('../public/posts');
 
 // Index che mi restituisce la lista in formato jsson
-router.get('/', getAllPosts);
+router.get('/', index);
 
 // Show che mi restituisce un singolo post 
-router.get('/:slug', getPostSlugOrTag);
+router.get('/:slug', show);
 
 
 //destroy elimino un posts 
-router.delete('/:slug', deletePostsBySlug);
+router.delete('/:slug', destroy);
+
+// store per un nuovo post 
+router.post('/', store);
 
 
 

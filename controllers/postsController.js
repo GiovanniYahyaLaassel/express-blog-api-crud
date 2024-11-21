@@ -3,7 +3,7 @@ const { post } = require('../routers/posts');
 
 
 // funzione (index)
-const getAllPosts = (req, res) => {
+const index = (req, res) => {
     console.log('Richiesta GET su /posts');
     res.json({
         count: posts.length,
@@ -12,7 +12,7 @@ const getAllPosts = (req, res) => {
 };
 
 // funzione (show)
-const getPostSlugOrTag = (req, res) => {
+const show = (req, res) => {
     const param = req.params.slug;  //ottengo lo slug
     const post = posts.find(p => p.slug === param); // trovo il post che corrisponde 
 
@@ -34,7 +34,7 @@ const getPostSlugOrTag = (req, res) => {
 
 // funzione (destroy)
 
-const deletePostsBySlug = (req, res) => {
+const destroy = (req, res) => {
     const slug = req.params.slug;
     const index = posts.findIndex(p => p.slug === slug); //trovo l'indice 
 
@@ -48,4 +48,31 @@ const deletePostsBySlug = (req, res) => {
     }
 }
 
-module.exports = {getAllPosts, getPostSlugOrTag,  deletePostsBySlug };
+// funzione (store per creare un nuovo post)
+const store = (req,res) => {
+    // ottengo i dati
+    const {title, slug, content, image, tags} = req.body;
+
+    // verifico i campi
+    if (!title || !slug || !content) {
+        return res.status(400).json({error:'Title, slug e content sono obbligatori '});
+    }
+
+    // creo il nuovo post 
+    const newPost = {
+        id: posts.length +1,
+        title,
+        slug,
+        content,
+        image: image || 'default.jpeg',
+        tags: tags || []
+    };
+
+    posts.push(newPost);
+
+    console.log('Nuovo post creato:', newPost);
+
+    res.status(201).json(newPost);
+}
+
+module.exports = { index, show, destroy, store };
