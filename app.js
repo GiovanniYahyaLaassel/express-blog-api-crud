@@ -1,6 +1,12 @@
 // Configurazione base di express
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
+const PORT = 3000;
+
+// abilito cors
+app.use(cors());
 
 
 // importo il router 
@@ -27,6 +33,6 @@ app.get('/', (req, res) => {
     res.send('Server del mio blog');
 });
 
-app.listen(3000, () => {
-    console.log('Server avviato su http://localhost:3000');
+app.listen(PORT, () => {
+    console.log(`Server in funzione su : ${PORT} `);
 });

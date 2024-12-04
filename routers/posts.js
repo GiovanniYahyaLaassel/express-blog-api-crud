@@ -24,12 +24,12 @@ router.post('/', store);
 
 
 
+
+module.exports = router;
+
 // router.get('/', (req, res) => {
 //     console.log('Richiesta GET su /posts');  //verifico la chiamata 
 //     res.send('Lista dei post');  //risposta che mi conferma la chiamata 
 // });
 
 // esporto il router per usarlo i altri file
-
-module.exports = router;
-
