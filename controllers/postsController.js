@@ -1,5 +1,5 @@
 const posts = require('../data/postsData');
-const { post } = require('../routers/posts');
+// const { post, param } = require('../routers/posts');
 
 
 // funzione (index)
@@ -76,4 +76,26 @@ const store = (req,res) => {
     res.status(201).json(newPost);
 }
 
-module.exports = { index, show, destroy, store };
+const update = (req, res) => {
+    const slug = req.params.slug;
+    const { title, content, image, tags } = req.body;
+
+    const postIndex = posts.findIndex(p => p.slug === slug);
+
+    if (postIndex !== -1) {
+        posts[postIndex] = {
+            ...posts[postIndex],
+            title: title || posts[postIndex].title,
+            content: content || posts[postIndex].content,
+            image: image || posts[postIndex].image,
+            tags: tags || posts[postIndex].tags,
+        };
+
+        console.log(`Post ${slug} aggiornato:`, posts[postIndex]);
+        res.json(posts[postIndex]);
+    } else {
+        console.log(`Post con slug ${slug} non trovato per aggiornamento`);
+        res.status(404).json({ error: `Post con slug ${slug} non trovato.` });
+    }
+};
+module.exports = { index, show, destroy, store, update };
