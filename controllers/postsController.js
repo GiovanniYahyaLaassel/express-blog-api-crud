@@ -13,38 +13,33 @@ const index = (req, res) => {
 
 // funzione (show)
 const show = (req, res) => {
-    const param = req.params.slug;  //ottengo lo slug
-    const post = posts.find(p => p.slug === param); // trovo il post che corrisponde 
+    const param = parseInt(req.params.id )  
+    const post = posts.find(p => p.id === param); // trovo il post che corrisponde 
 
     if(post) {
-        console.log(`Richiesta GET su /posts/ ${param} (slug) `); //monitoro la richiesta
+        console.log(`Richiesta GET su /posts/ ${param} (id) `); //monitoro la richiesta
         res.json(post);
     } 
 
-    const filteredPosts = posts.filter(p => p.tags.includes(param)); 
-    
-    if (filteredPosts.length > 0 ) {
-        console.log(`Richiesta GET su /posts/ ${param} (tag) `);
-        return res.json(filteredPosts);
+     else {
+        console.log(`Nessun post trovato con id: ${param}`);
+        res.status(404).json({ error: `Nessun post trovato con id: ${param}` });
     }
-
-        console.log(`Nessun post trovato slug o tag ${param}`);
-        res.status(404).json({error: `Nessun post trovato slug o tag ${param}`});
 };
 
 // funzione (destroy)
 
 const destroy = (req, res) => {
-    const slug = req.params.slug;
-    const index = posts.findIndex(p => p.slug === slug); //trovo l'indice 
+    const id = parseInt(req.params.id);
+    const index = posts.findIndex(p => p.id === id); //trovo l'indice 
 
     if(index !== -1) {
         const deletedPosts = posts.splice(index, 1); // rimuovo il post degli array
-        console.log(`Posts ${slug} elimniato . Lista aggiornata: ${posts}` );  
+        console.log(`Posts ${id} elimniato . Lista aggiornata: ${posts}` );  
         res.status(204).send();
     } else {
-        console.log(`Posts con slug ${slug} non trovato`);
-        res.status(404).json({error: `Posts con slug ${slug} non trovato.`});
+        console.log(`Posts con id ${id} non trovato`);
+        res.status(404).json({error: `Posts con id ${id} non trovato.`});
     }
 }
 
@@ -52,18 +47,17 @@ const destroy = (req, res) => {
 const store = (req,res) => {
     console.log('Dati ricevuti nel body:',req.body);  //dati in arrivo
     // ottengo i dati
-    const {title, slug, content, image, tags} = req.body;
+    const {title, content, image, tags} = req.body;
 
     // verifico i campi
-    if (!title || !slug || !content) {
-        return res.status(400).json({error:'Title, slug e content sono obbligatori '});
+    if (!title || !content) {
+        return res.status(400).json({error:'Title, id e content sono obbligatori '});
     }
 
     // creo il nuovo post 
     const newPost = {
         id: posts.length +1,
         title,
-        slug,
         content,
         image: image || 'default.jpeg',
         tags: tags || []
@@ -77,10 +71,11 @@ const store = (req,res) => {
 }
 
 const update = (req, res) => {
-    const slug = req.params.slug;
+    
+    const id = parseInt(req.params.id);
     const { title, content, image, tags } = req.body;
 
-    const postIndex = posts.findIndex(p => p.slug === slug);
+    const postIndex = posts.findIndex(p => p.id === id);
 
     if (postIndex !== -1) {
         posts[postIndex] = {
@@ -91,11 +86,11 @@ const update = (req, res) => {
             tags: tags || posts[postIndex].tags,
         };
 
-        console.log(`Post ${slug} aggiornato:`, posts[postIndex]);
+        console.log(`Post ${id} aggiornato:`, posts[postIndex]);
         res.json(posts[postIndex]);
     } else {
-        console.log(`Post con slug ${slug} non trovato per aggiornamento`);
-        res.status(404).json({ error: `Post con slug ${slug} non trovato.` });
+        console.log(`Post con id ${id} non trovato per aggiornamento`);
+        res.status(404).json({ error: `Post con id ${id} non trovato.` });
     }
 };
 module.exports = { index, show, destroy, store, update };
